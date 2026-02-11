@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL, // must point to Vercel backend
 });
 
-// Optional: attach JWT token if used
+
 API.interceptors.request.use((config) => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
   if (user.token) config.headers.Authorization = `Bearer ${user.token}`;
