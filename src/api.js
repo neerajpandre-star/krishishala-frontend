@@ -1,15 +1,13 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // read from .env
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Automatically attach JWT token if available
+// Optional: attach JWT token if used
 API.interceptors.request.use((config) => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
-  if (user.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
-  }
+  if (user.token) config.headers.Authorization = `Bearer ${user.token}`;
   return config;
 });
 
