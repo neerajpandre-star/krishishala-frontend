@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import API from "../api";
 
 export default function AdminCreateTest() {
   const { exam } = useParams();
@@ -57,7 +58,7 @@ export default function AdminCreateTest() {
     const payload = { exam, testName, questions };
 
     try {
-      const res = await fetch("http://localhost:5000/api/tests", {
+      const res = await fetch(`${API.BASE_URL}/api/tests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
