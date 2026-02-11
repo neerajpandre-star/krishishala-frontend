@@ -8,7 +8,7 @@ export default function StudentMockTestsList() {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/tests");
+        const res = await fetch(`${API_URL}/api/tests`);
         const allTests = await res.json();
 
         // Get student's registered exam preference

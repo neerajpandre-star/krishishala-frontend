@@ -5,12 +5,11 @@ export default function StudentDashboard() {
   const [tests, setTests] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/tests", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+    API.get("/tests", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => setTests(res.data));
   }, []);
 

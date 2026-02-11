@@ -61,9 +61,8 @@ export default function MockTest() {
 
   /* ---------------- FETCH TEST ---------------- */
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tests/${exam}/${testName}`)
-      .then((res) => res.json())
-      .then(setTest)
+    API.get(`/tests/${exam}/${testName}`)
+      .then((res) => setTest(res.data))
       .catch(console.error);
   }, [exam, testName]);
 
