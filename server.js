@@ -8,26 +8,39 @@ import adminRoutes from "./routes/adminRoutes.js";
 import testRoutes from "./routes/testRoutes.js";
 import userRoutes from "./routes/Users.js";
 
-
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174"], credentials: true }));
+
+/* ---------- MIDDLEWARE ---------- */
+app.use(cors({
+  origin: "*", // allow Vercel + localhost
+  credentials: true,
+}));
+
 app.use(express.json());
 
-// Routes
+/* ---------- ROUTES ---------- */
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 app.use("/api/users", userRoutes);
 
-// MongoDB connect
+/* ---------- HEALTH CHECK (IMPORTANT) ---------- */
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
+
+/* ---------- DB CONNECT ---------- */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => {
-    console.error("❌ MongoDB error:", err);
-    process.exit(1);
+    console.error("❌ MongoDB error:", err.message);
   });
 
-app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+/* ---------- SERVER START ---------- */
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);
