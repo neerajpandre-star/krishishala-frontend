@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API from "../api";
 
 export default function StudentMockTestsList() {
   const [tests, setTests] = useState([]);
@@ -8,8 +9,8 @@ export default function StudentMockTestsList() {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/tests`);
-        const allTests = await res.json();
+        const res = await API.get("/mock-tests");
+        const allTests = res.data;
 
         // Get student's registered exam preference
         const studentExam = localStorage.getItem("examPreference")?.toLowerCase();
