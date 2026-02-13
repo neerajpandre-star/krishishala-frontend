@@ -14,7 +14,7 @@ const app = express();
 
 /* ---------- MIDDLEWARE ---------- */
 app.use(cors({
-  origin: "krishishala-frontendz.vercel.app", // allow Vercel + localhost
+  origin: "https://krishishala-frontendzz.vercel.app", // allow Vercel + localhost
   credentials: true,
 }));
 
