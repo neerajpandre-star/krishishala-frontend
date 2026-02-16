@@ -13,25 +13,45 @@ dotenv.config();
 const app = express();
 
 /* ---------- MIDDLEWARE ---------- */
-app.use(cors({
-  origin: "krishishala-front-git-main-neerajpandre-stars-projects.vercel.app", // allow Vercel + localhost
-  credentials: true,
-}));
+
+// ✅ Dynamic CORS for Vercel (production + preview) + localhost
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      // Allow all Vercel deployments
+      if (
+        origin.endsWith(".vercel.app") ||
+        origin.includes("localhost")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
 /* ---------- ROUTES ---------- */
+
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 app.use("/api/users", userRoutes);
 
-/* ---------- HEALTH CHECK (IMPORTANT) ---------- */
+/* ---------- HEALTH CHECK ---------- */
+
 app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-/* ---------- DB CONNECT ---------- */
+/* ---------- DATABASE CONNECTION ---------- */
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
@@ -40,7 +60,9 @@ mongoose
   });
 
 /* ---------- SERVER START ---------- */
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
