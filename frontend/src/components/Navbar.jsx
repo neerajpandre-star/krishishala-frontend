@@ -57,7 +57,7 @@ export default function Navbar() {
               <Link to="/dashboard">Overview</Link>
               <Link to="/resources">Resources</Link>
               <Link to="/previous-year-papers">Previous Papers</Link>
-              <Link to="/mock-test">Mock Tests</Link>
+              <Link to="/tests">Mock Tests</Link>
 
               {user.role === "admin" && <Link to="/admin">Admin Panel</Link>}
             </div>

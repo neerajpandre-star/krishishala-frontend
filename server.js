@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import testRoutes from "./routes/testRoutes.js";
 import userRoutes from "./routes/Users.js";
+import pyqRoutes from "./routes/pyqRoutes.js";
 
 dotenv.config();
 
@@ -43,6 +44,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/tests", testRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/pyqs", pyqRoutes);
+app.use("/uploads", express.static("uploads"));
 
 /* ---------- HEALTH CHECK ---------- */
 

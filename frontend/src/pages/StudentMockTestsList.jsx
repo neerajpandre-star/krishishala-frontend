@@ -9,7 +9,7 @@ export default function StudentMockTestsList() {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const res = await API.get("/mock-tests");
+        const res = await API.get("/MockTests");
         const allTests = res.data;
 
         // Get student's registered exam preference
