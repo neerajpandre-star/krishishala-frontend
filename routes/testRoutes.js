@@ -3,7 +3,7 @@ import Test from "../models/Test.js";
 
 const router = express.Router();
 
-/* ✅ GET: Fetch all distinct exams */
+/* ✅ GET: All distinct exams */
 router.get("/exams/list", async (req, res) => {
   try {
     const exams = await Test.distinct("exam");
@@ -13,11 +13,49 @@ router.get("/exams/list", async (req, res) => {
   }
 });
 
-/* ✅ POST: Create a new test */
+/* ✅ GET: All tests */
+router.get("/", async (req, res) => {
+  try {
+    const tests = await Test.find().select("exam testName");
+    res.json(tests);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch tests" });
+  }
+});
+
+/* ✅ GET: Tests by exam */
+router.get("/exam/:exam", async (req, res) => {
+  try {
+    const tests = await Test.find({
+      exam: req.params.exam.toLowerCase(),
+    }).select("exam testName");
+
+    res.json(tests);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch tests" });
+  }
+});
+
+/* ✅ GET: Single test by ID */
+router.get("/:id", async (req, res) => {
+  try {
+    const test = await Test.findById(req.params.id);
+
+    if (!test) {
+      return res.status(404).json({ message: "Test not found" });
+    }
+
+    res.json(test);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+/* ✅ POST: Create new test */
 router.post("/", async (req, res) => {
   try {
     if (!req.body.exam || !req.body.testName) {
-      return res.status(400).json({ message: "Exam and testName are required" });
+      return res.status(400).json({ message: "Exam and testName required" });
     }
 
     const test = new Test({
@@ -32,43 +70,20 @@ router.post("/", async (req, res) => {
   }
 });
 
-/* ✅ GET: Fetch all tests */
-router.get("/", async (req, res) => {
+/* ✅ POST: Submit test */
+router.post("/:id/submit", async (req, res) => {
   try {
-    const tests = await Test.find().select("exam testName");
-    res.json(tests);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch tests" });
-  }
-});
+    const { answers, score, timeSpent } = req.body;
 
-/* ✅ Alias route */
-router.get("/available", async (req, res) => {
-  try {
-    const tests = await Test.find().select("exam testName");
-    res.json(tests);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch tests" });
-  }
-});
-
-/* 🚨 ALWAYS KEEP DYNAMIC ROUTES LAST */
-router.get("/:exam/:testName", async (req, res) => {
-  try {
-    const { exam, testName } = req.params;
-
-    const test = await Test.findOne({
-      exam: exam.toLowerCase(),
-      testName: decodeURIComponent(testName),
+    // You can later save this in Result model
+    res.json({
+      message: "Submission saved",
+      score,
+      answers,
+      timeSpent,
     });
-
-    if (!test) {
-      return res.status(404).json({ message: "Test not found" });
-    }
-
-    res.json(test);
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Submission failed" });
   }
 });
 
